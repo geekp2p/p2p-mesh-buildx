@@ -1,0 +1,70 @@
+cd Y:\emulator\p2p-mesh\relay
+go mod init p2p-mesh/relay
+go mod tidy
+
+
+cd Y:\emulator\p2p-mesh\node
+go mod init p2p-mesh/node
+go mod tidy
+
+
+
+docker compose build --no-cache
+
+docker compose down -v
+
+docker compose --env-file .env up
+
+go build ./...
+
+docker compose logs relay | grep -E "Relay PeerID|Listen:"
+# Windows PowerShell:
+# docker compose logs relay | Select-String -Pattern "Relay PeerID|Listen:"
+
+1) รันรีเลย์ (บนเครื่องมี IP สาธารณะ หรือเครื่องทดสอบ)
+cd relay
+go mod tidy
+go build -o p2p-relay .
+# ตั้งค่าตามต้องการ
+set RELAY_LISTEN=/ip4/0.0.0.0/tcp/4003        # Windows CMD
+# PowerShell: $env:RELAY_LISTEN="/ip4/0.0.0.0/tcp/4003"
+./p2p-relay
+
+2) รันโหนด
+
+เปิดเทอร์มินัลใหม่
+
+cd node
+go mod tidy
+go build -o p2p-node .
+
+ตัวอย่าง: รัน node1
+# Windows CMD
+set APP_ROOM=my-room
+set LISTEN_TCP=/ip4/0.0.0.0/tcp/4001
+set LISTEN_QUIC=/ip4/0.0.0.0/udp/4001/quic-v1
+set ENABLE_RELAY_CLIENT=true
+set ENABLE_HOLEPUNCH=true
+set ENABLE_UPNP=true
+set RELAY_ADDR=/ip4/<PUBLIC_IP_OR_DNS>/tcp/4003/p2p/<RELAY_PEER_ID>
+.\p2p-node
+
+ตัวอย่าง: รัน node2 (เครื่องเดียวกันหรืออีกเครื่อง)
+# Windows CMD
+set APP_ROOM=my-room
+set LISTEN_TCP=/ip4/0.0.0.0/tcp/4002
+set LISTEN_QUIC=/ip4/0.0.0.0/udp/4002/quic-v1
+set ENABLE_RELAY_CLIENT=true
+set ENABLE_HOLEPUNCH=true
+set ENABLE_UPNP=true
+set RELAY_ADDR=/ip4/<PUBLIC_IP_OR_DNS>/tcp/4003/p2p/<RELAY_PEER_ID>
+.\p2p-node
+
+
+dism /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart
+Set-VMProcessor -VMName <ชื่อ VM> -ExposeVirtualizationExtensions $true
+
+✅ cd node && go test ./...
+
+✅ cd ../relay && go test ./...
+

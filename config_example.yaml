@@ -1,0 +1,10 @@
+app_room: my-room
+relay_listen: /ip4/0.0.0.0/tcp/4003
+relay_addr: /ip4/<RELAY_IP>/tcp/4003/p2p/<RELAY_PEER_ID>
+enable_relay_client: true
+enable_holepunch: true
+enable_upnp: true
+bootstrap_peers:
+  - /ip4/<NODE_IP>/tcp/4001/p2p/<NODE_PEER_ID>
+announce_addrs:
+  - /ip4/<YOUR_PUBLIC_IP>/tcp/4003   # optional public relay address

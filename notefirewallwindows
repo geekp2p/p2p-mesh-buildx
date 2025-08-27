@@ -1,0 +1,32 @@
+# อนุญาตพอร์ต 4003 TCP/UDP
+New-NetFirewallRule -DisplayName "P2P Relay TCP 4003" -Direction Inbound -Protocol TCP -LocalPort 4003 -Action Allow
+New-NetFirewallRule -DisplayName "P2P Relay UDP 4003" -Direction Inbound -Protocol UDP -LocalPort 4003 -Action Allow
+
+# อนุญาตพอร์ต 4001 TCP/UDP
+New-NetFirewallRule -DisplayName "P2P Node TCP 4001" -Direction Inbound -Protocol TCP -LocalPort 4001 -Action Allow
+New-NetFirewallRule -DisplayName "P2P Node UDP 4001" -Direction Inbound -Protocol UDP -LocalPort 4001 -Action Allow
+
+New-NetFirewallRule -DisplayName "P2P HTTP 3001" -Direction Inbound -Protocol TCP -LocalPort 3001 -Action Allow
+New-NetFirewallRule -DisplayName "P2P HTTP 3002" -Direction Inbound -Protocol TCP -LocalPort 3002 -Action Allow
+
+New-NetFirewallRule -DisplayName "P2P Node2 TCP 4002" -Direction Inbound -Protocol TCP -LocalPort 4002 -Action Allow
+New-NetFirewallRule -DisplayName "P2P Node2 UDP 4002" -Direction Inbound -Protocol UDP -LocalPort 4002 -Action Allow
+
+
+
+
+Get-NetFirewallRule | findstr P2P
+
+netsh advfirewall reset
+
+ระวัง remote ไม่ได้
+
+New-NetFirewallRule -DisplayName "Allow RDP 3389" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow
+New-NetFirewallRule -DisplayName "Allow RDP 3389 UDP" -Direction Inbound -Protocol UDP -LocalPort 3389 -Action Allow
+
+Get-NetFirewallRule | findstr RDP
+
+
+New-NetFirewallRule -DisplayName "P2P HTTP 3000" -Direction Inbound -Protocol TCP -LocalPort 3000 -Action Allow
+
+Test-NetConnection 103.13.31.47 -Port 4003

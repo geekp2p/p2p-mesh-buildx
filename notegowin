@@ -1,0 +1,7 @@
+cd C:\Users\Administrator\p2p-mesh\relay && go mod download && go build -o ..\bin\relay.exe . && cd ..\node && go mod download && go build -o ..\bin\node.exe . && cd ..
+
+cd C:\Users\Administrator\p2p-mesh && set APP_ROOM=room1 && .\bin\relay.exe
+
+cd C:\Users\Administrator\p2p-mesh && set APP_ROOM=room1 && set ENABLE_RELAY_CLIENT=1 && set ENABLE_HOLEPUNCH=0 && set ENABLE_UPNP=0 && .\bin\node.exe
+
+cd C:\Users\Administrator\p2p-mesh && set APP_ROOM=room1 && set ENABLE_RELAY_CLIENT=1 && set ENABLE_HOLEPUNCH=0 && set ENABLE_UPNP=0 && .\bin\node.exe

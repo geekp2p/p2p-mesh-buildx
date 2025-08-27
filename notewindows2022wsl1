@@ -1,0 +1,24 @@
+sudo dockerd
+
+
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all
+
+wsl --install -d Ubuntu --version 1
+
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+
+sudo apt-get update && sudo apt-get upgrade -y
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && sudo apt-get update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo usermod -aG docker $USER
+
+sudo dockerd
+
+docker run hello-world
+
+sudo pkill dockerd || true
+
+sudo apt-get update && sudo apt-get install -y golang-go git && cd /mnt/c/Users/Administrator/p2p-mesh && go mod download
+
+find . -maxdepth 3 -type f -name main.go -printf "%P\n"

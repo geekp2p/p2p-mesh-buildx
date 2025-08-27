@@ -1,0 +1,86 @@
+services:
+  relay:
+    build: ./relay
+    container_name: p2p-relay
+    restart: unless-stopped
+    ports:
+      - "4003:4003/tcp"
+      - "4003:4003/udp"
+    environment:
+      - RELAY_LISTEN=${RELAY_LISTEN}
+      - RELAY_PRIVATE=false
+      - ANNOUNCE_ADDRS=${RELAY_ANNOUNCE}
+    volumes:
+      - relay-data:/data
+
+  node1:
+    build: ./node
+    container_name: p2p-node-1
+    restart: unless-stopped
+    environment:
+      - APP_ROOM=${APP_ROOM}
+      - RELAY_ADDR=${RELAY_ADDR}
+      - LISTEN_TCP=/ip4/0.0.0.0/tcp/4001
+      - LISTEN_QUIC=/ip4/0.0.0.0/udp/4001/quic-v1
+      - ENABLE_RELAY_CLIENT=${ENABLE_RELAY_CLIENT}
+      - ENABLE_HOLEPUNCH=${ENABLE_HOLEPUNCH}
+      - ENABLE_UPNP=${ENABLE_UPNP}
+      - BOOTSTRAP_PEERS=${BOOTSTRAP_PEERS}
+      - WEB_ADDR=:3000
+      - ANNOUNCE_ADDRS=${NODE1_ANNOUNCE}
+    ports:
+      - "4001:4001/tcp"
+      - "4001:4001/udp"
+      - "3001:3000/tcp"
+    # sysctls removed for compatibility with hosts that do not expose
+    # /proc/sys/net/core/* entries (e.g. WSL1 or non-Linux kernels). The
+    # containers will fall back to default UDP/TCP buffer sizes.
+    # sysctls:
+    #   net.core.rmem_max: 8388608     # 8 MiB
+    #   net.core.rmem_default: 8388608
+    #   net.core.wmem_max: 8388608
+    #   net.core.wmem_default: 8388608
+    # หากต้องการเพิ่ม buffer ในอนาคตอาจต้องเปิด cap_add NET_ADMIN
+    # cap_add:
+    #   - NET_ADMIN
+    volumes:
+      - node1-data:/data
+    depends_on:
+      - relay
+  node2:
+    build: ./node
+    container_name: p2p-node-2
+    restart: unless-stopped
+    environment:
+      - APP_ROOM=${APP_ROOM}
+      - RELAY_ADDR=${RELAY_ADDR}
+      - LISTEN_TCP=/ip4/0.0.0.0/tcp/4001
+      - LISTEN_QUIC=/ip4/0.0.0.0/udp/4001/quic-v1
+      - ENABLE_RELAY_CLIENT=${ENABLE_RELAY_CLIENT}
+      - ENABLE_HOLEPUNCH=${ENABLE_HOLEPUNCH}
+      - ENABLE_UPNP=${ENABLE_UPNP}
+      - BOOTSTRAP_PEERS=${BOOTSTRAP_PEERS}
+      - WEB_ADDR=:3000
+      - ANNOUNCE_ADDRS=${NODE2_ANNOUNCE}
+    ports:
+      - "4002:4001/tcp"
+      - "4002:4001/udp"
+      - "3002:3000/tcp"
+    # sysctls removed for compatibility with hosts that do not expose
+    # /proc/sys/net/core/* entries. Containers will use default buffer sizes.
+    # sysctls:
+    #   net.core.rmem_max: 8388608
+    #   net.core.rmem_default: 8388608
+    #   net.core.wmem_max: 8388608
+    #   net.core.wmem_default: 8388608
+    # cap_add:
+    #   - NET_ADMIN
+    volumes:
+      - node2-data:/data
+    depends_on:
+      - relay
+
+volumes:
+  relay-data:
+  node1-data:
+  node2-data:
