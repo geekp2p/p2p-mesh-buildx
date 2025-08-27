@@ -1,0 +1,8 @@
+# สร้าง binaries ของ node และ relay (Linux + Windows) แล้วดึงออกเป็นไฟล์
+docker buildx build --output type=local,dest=./bin .
+
+
+node_linux
+node.exe
+relay_linux
+relay.exe

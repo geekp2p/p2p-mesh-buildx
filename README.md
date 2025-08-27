@@ -13,6 +13,10 @@ The system is serverless by design, with optional relay support for guaranteed c
 - ✅ Optional Circuit Relay v2 for guaranteed connectivity
 - ✅ Global peer discovery using Kademlia DHT with optional bootstrap peers
 - ✅ Docker Compose setup for easy multi-node deployment
+## 🖧 LAN Deployment
+
+If all peers are on the same LAN and can reach each other directly, run only node instances—no relay is needed. At least two nodes must be running to communicate. Add a relay only when NAT or firewall rules block direct connections, optionally deploying it inside the LAN to help traverse those restrictions.
+
 ## 📦 Quick Start
 
 Clone and run two local nodes in Docker:
@@ -208,6 +212,19 @@ announce_addrs:
   - /ip4/103.13.31.47/tcp/4001
 ```
 
+## 🐳 Build Node and Relay binaries with Docker Buildx
+
+The repository includes a root `Dockerfile` that builds both the node and relay for Linux and Windows in one pass. Use Docker Buildx to produce standalone binaries:
+
+```bash
+docker buildx build --output type=local,dest=./bin .
+```
+
+The resulting `./bin/out/` directory contains:
+- node_linux and node.exe
+- relay_linux and relay.exe
+
+The node binary already embeds its web UI via `go:embed`, so no extra files are required.
 
 ## 🛠 Manual Build
 
