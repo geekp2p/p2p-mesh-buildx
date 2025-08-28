@@ -24,3 +24,13 @@ GOOS=windows GOARCH=amd64 go build -o p2p-relay.exe ./relay
 docker buildx build --output type=local,dest=./bin .
 
 docker buildx build --target builder --output type=local,dest=./bin .
+
+
+
+docker buildx build --target artifacts --output type=local,dest=./bin .
+
+docker buildx build --target artifacts --output type=tar,dest=bin.tar .
+
+tar -xf bin.tar -C bin
+
+docker buildx build --target runtime -t p2p-mesh .
