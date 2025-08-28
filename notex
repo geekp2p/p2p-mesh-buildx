@@ -6,3 +6,19 @@ node_linux
 node.exe
 relay_linux
 relay.exe
+
+ขั้นตอนการ build
+Node (Ubuntu/Linux)
+
+GOOS=linux GOARCH=amd64 go build -o p2p-node-linux ./node
+Node (Windows)
+
+GOOS=windows GOARCH=amd64 go build -o p2p-node.exe ./node
+Relay (Ubuntu/Linux)
+
+GOOS=linux GOARCH=amd64 go build -o p2p-relay-linux ./relay
+Relay (Windows)
+
+GOOS=windows GOARCH=amd64 go build -o p2p-relay.exe ./relay
+
+docker buildx build --output type=local,dest=./bin .
